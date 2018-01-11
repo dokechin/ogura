@@ -11,8 +11,8 @@ module.exports = {
     browser
       .url(devServer)
       .waitForElementVisible('#app', 5000)
-      .assert.elementPresent('.hello')
-      .assert.containsText('h1', 'Welcome to Your Vue.js PWA')
+      .assert.elementPresent('.ogura')
+      .assert.containsText('h1', 'Ogura')
       .assert.elementCount('img', 1)
       .end()
   }
