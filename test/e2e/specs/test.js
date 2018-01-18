@@ -11,8 +11,7 @@ module.exports = {
     browser
       .url(devServer)
       .waitForElementVisible('#app', 5000)
-      .assert.elementPresent('.ogura')
-      .assert.containsText('h1', 'Ogura')
+      .assert.containsText('h2', '開始前')
       .assert.elementCount('img', 1)
       .end()
   }
