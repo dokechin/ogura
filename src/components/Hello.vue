@@ -4,7 +4,6 @@
       <h2>{{ fuda }}</h2>
     </v-layout>
     <v-btn large id="next" v-on:click="nextFuda" :disabled="index == 99">読み上げ</v-btn>
-    <v-btn large id="again" v-on:click="read">もう一度</v-btn>
   </div>
 </template>
 
@@ -18,6 +17,7 @@ export default {
   },
   data () {
     return {
+      timeoutHandle: null,
       title: 'Ogura',
       items: [
         { uta: '秋の田の　かりほの庵の　苫をあらみ　わが衣手は　露にぬれつつ', yomi: '秋の田の　かりほのいおの　苫をあらみ　わが衣手は　露にぬれつつ', author: '天智天皇' },
@@ -126,6 +126,9 @@ export default {
   methods: {
     nextFuda () {
       this.index++
+      if (this.timeoutHandle != null) {
+        clearTimeout(this.timeoutHandle)
+      }
       this.read()
     },
     read () {
@@ -134,6 +137,9 @@ export default {
       u.lang = 'ja-JP'
       u.rate = 1.0
       speechSynthesis.speak(u)
+
+      var that = this
+      this.timeoutHandle = setTimeout(function () { that.read() }, 15000)
     },
     shuffle () {
       this.items = arrayShuffle(this.items)
