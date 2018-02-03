@@ -6,8 +6,8 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    repeatInterval: null,
-    readingSpeed: null,
+    repeatInterval: 15,
+    readingSpeed: 100,
     readingIndex: -1,
     timeoutHandle: null,
     readingOrder: [
