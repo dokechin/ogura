@@ -1,24 +1,29 @@
 <template>
   <div class="ogura">
     <v-layout row justify-center>
-      <h2>{{ fuda }}</h2>
+      <img src="../assets/logo.png"/>
     </v-layout>
-    <v-btn large id="next" v-on:click="nextFuda" :disabled="index == 99">読み上げ</v-btn>
+    <v-layout row justify-center>
+      <h2>{{ display }}</h2>
+    </v-layout>
+    <v-layout row justify-center>
+      <v-btn large id="next" v-on:click="nextFuda" :disabled="this.$store.state.readingIndex == 99">読み上げ</v-btn>
+    </v-layout>
+    <br>
+    <v-layout row justify-center>
+      <v-btn large v-on:click="replay" :disabled="this.$store.state.readingIndex == -1">リプレイ</v-btn>
+    </v-layout>
   </div>
 </template>
 
 <script>
-import arrayShuffle from 'array-shuffle'
 
 export default {
   name: 'ogura',
   created () {
-    this.shuffle()
   },
   data () {
     return {
-      timeoutHandle: null,
-      title: 'Ogura',
       items: [
         { uta: '秋の田の　かりほの庵の　苫をあらみ　わが衣手は　露にぬれつつ', yomi: '秋の田の　かりほのいおの　苫をあらみ　わが衣手は　露にぬれつつ', author: '天智天皇' },
         { uta: '春すぎて　夏来にけらし　白妙の　衣ほすてふ　天の香具山', yomi: '春すぎて　夏きにけらし　白妙の　衣ほすちょう　あまのかぐ山', author: '持統天皇' },
@@ -119,38 +124,39 @@ export default {
         { uta: '風そよぐ　ならの小川の　夕暮れは　みそぎぞ夏の　しるしなりける', yomi: '風そよぐ　ならの小川の　夕暮れは　みそぎぞ夏の　しるしなりける', author: '従二位家隆' },
         { uta: '人も惜し　人も恨めし　あぢきなく　世を思ふゆゑに　物思ふ身は', yomi: '人も惜し　人も恨めし　あぢきなく　世をおもうゆゑに　物おもう身は', author: '後鳥羽院' },
         { uta: 'ももしきや　古き軒端の　しのぶにも　なほあまりある　昔なりけり', yomi: 'ももしきや　古き軒端の　しのぶにも　なおあまりある　昔なりけり', author: '順徳院' }
-      ],
-      index: -1
+      ]
     }
   },
   methods: {
     nextFuda () {
-      this.index++
-      if (this.timeoutHandle != null) {
-        clearTimeout(this.timeoutHandle)
-      }
+      this.$store.commit('incrementIndex')
       this.read()
+    },
+    replay () {
+      this.$store.commit('initializeGame')
     },
     read () {
       var u = new SpeechSynthesisUtterance()
-      u.text = this.items[this.index].yomi
+      u.text = this.items[this.$store.state.readingOrder[this.$store.state.readingIndex]].yomi
       u.lang = 'ja-JP'
-      u.rate = 1.0
+      u.rate = this.$store.state.readingSpeed / 100
       speechSynthesis.speak(u)
 
+      if (this.$store.state.timeoutHandle != null) {
+        clearTimeout(this.$store.state.timeoutHandle)
+        this.$store.commit('setTimeoutHandle', null)
+      }
       var that = this
-      this.timeoutHandle = setTimeout(function () { that.read() }, 15000)
-    },
-    shuffle () {
-      this.items = arrayShuffle(this.items)
+      var handle = setTimeout(function () { that.read() }, that.$store.state.repeatInterval * 1000)
+      this.$store.commit('setTimeoutHandle', handle)
     }
   },
   computed: {
-    fuda () {
-      if (this.index === -1) {
+    display () {
+      if (this.$store.state.readingIndex === -1) {
         return '開始前'
       } else {
-        return (this.index + 1) + '首目'
+        return (this.$store.state.readingIndex + 1) + '首目'
       }
     }
   }

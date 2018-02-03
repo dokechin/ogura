@@ -1,15 +1,16 @@
 <template>
   <v-app>
-    <v-navigation-drawer app></v-navigation-drawer>
-    <v-toolbar app><v-toolbar-title>{{ title }}</v-toolbar-title></v-toolbar>
+    <v-toolbar app>
+      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn flat exact to="/">読み上げ</v-btn>
+        <v-btn flat exact to="/setting">設定</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
     <v-content>
       <v-container fluid>
-        <v-layout row justify-center>
-          <img src="./assets/logo.png"/>
-        </v-layout>
-        <v-layout row justify-center>
-          <router-view></router-view>
-        </v-layout>
+        <router-view></router-view>
       </v-container>
     </v-content>
     <v-footer app>
