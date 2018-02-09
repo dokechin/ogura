@@ -20,13 +20,32 @@ export const store = new Vuex.Store({
       60, 61, 62, 63, 64, 65, 66, 67, 68, 69,
       70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
       80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
-      90, 91, 92, 93, 94, 95, 96, 97, 98, 99]
+      90, 91, 92, 93, 94, 95, 96, 97, 98, 99],
+    members: [],
+    players: [],
+    scores: {},
+    results: []
   },
   mutations: {
+    incrementScore (state, index) {
+      state.scores[index]++
+      state.results.push(index)
+      localStorage.setItem('store', JSON.stringify(state))
+    },
+    addMember (state, name) {
+      state.members.push(name)
+      localStorage.setItem('store', JSON.stringify(state))
+    },
+    removeMember (state, index) {
+      state.members.splice(index, 1)
+    },
     setParameter (state, parameter) {
       state.repeatInterval = parameter.repeatInterval
       state.readingSpeed = parameter.readingSpeed
       localStorage.setItem('store', JSON.stringify(state))
+    },
+    setPlayers (state, players) {
+      state.players = players
     },
     setTimeoutHandle (state, timeoutHandle) {
       state.timeoutHandle = timeoutHandle
@@ -34,7 +53,7 @@ export const store = new Vuex.Store({
     initializeStore (state) {
       if (localStorage.getItem('store')) {
         this.replaceState(Object.assign(state, JSON.parse(localStorage.getItem('store'))))
-        state.timeOutHandle = null
+        state.timeoutHandle = null
       }
     },
     incrementIndex (state) {
@@ -44,6 +63,10 @@ export const store = new Vuex.Store({
     initializeGame (state) {
       state.readingOrder = arrayShuffle(state.readingOrder)
       state.readingIndex = -1
+      var scores = {}
+      state.players.forEach(function (v) { scores[v] = 0 })
+      state.scores = scores
+      state.results = []
       localStorage.setItem('store', JSON.stringify(state))
     }
   }

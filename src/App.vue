@@ -2,10 +2,6 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="mr-5">{{ title }}</v-toolbar-title>
-      <v-toolbar-items class="hidden-sm-and-down">
-         <v-btn flat exact to="/">読み上げ</v-btn>
-         <v-btn flat exact to="/setting">設定</v-btn>
-      </v-toolbar-items>
     </v-toolbar>
     <v-content>
       <v-container fluid>

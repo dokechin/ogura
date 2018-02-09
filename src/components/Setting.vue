@@ -16,6 +16,9 @@
       <v-flex xs12>
         <v-btn @click="update" :disabled="!valid">保存</v-btn>
       </v-flex>
+      <v-flex xs12>
+        <v-btn to="/">メニューへ戻る</v-btn>
+      </v-flex>
     </v-layout>
   </v-form>
 </template>

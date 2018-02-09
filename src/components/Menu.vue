@@ -4,14 +4,13 @@
       <img src="../assets/logo.png"/>
     </v-layout>
     <v-layout row justify-center>
-      <h2>{{ display }}</h2>
+      <v-btn large to="/register">ユーザ登録</v-btn>
     </v-layout>
     <v-layout row justify-center>
-      <v-btn large id="next" v-on:click="nextFuda" :disabled="this.$store.state.readingIndex == 99">読み上げ</v-btn>
+      <v-btn large to="/entrance" :disabled="this.$store.state.members.length == 0">プレイ</v-btn>
     </v-layout>
-    <br>
     <v-layout row justify-center>
-      <v-btn large v-on:click="replay" :disabled="this.$store.state.readingIndex == -1">リプレイ</v-btn>
+      <v-btn large to="/setting">設定</v-btn>
     </v-layout>
   </div>
 </template>

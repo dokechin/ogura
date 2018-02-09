@@ -20,6 +20,5 @@ new Vue({
   components: { App },
   beforeCreate () {
     this.$store.commit('initializeStore')
-    this.$store.commit('shuffle')
   }
 })
